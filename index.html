@@ -54,11 +54,19 @@
         }
 
         body, html {
-            background-color: var(--bg-color);
+            background-color: var(--burgundy);
             color: var(--cream);
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 15% 15%, rgba(var(--rose-rgb), 0.22), transparent 30%),
+                radial-gradient(circle at 85% 45%, rgba(var(--gold-rgb), 0.08), transparent 28%),
+                linear-gradient(145deg, #3d0d1a 0%, var(--burgundy) 48%, #29070f 100%);
+            background-attachment: fixed;
         }
 
         img {
@@ -86,6 +94,37 @@
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 0;
+        }
+
+        /* === ANIMATED ROSE & LOVE DOODLES === */
+        #background-doodles {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .doodle {
+            position: absolute;
+            color: var(--rose);
+            font-family: 'Dancing Script', cursive;
+            opacity: 0.1;
+            filter: drop-shadow(0 0 10px rgba(var(--rose-rgb), 0.18));
+            animation: doodleDrift var(--drift-time, 16s) ease-in-out infinite alternate;
+        }
+        .doodle.rose-art {
+            color: var(--cream);
+            opacity: 0.08;
+            animation: roseFloat var(--drift-time, 18s) ease-in-out infinite alternate;
+        }
+        @keyframes doodleDrift {
+            0% { transform: translate3d(-8px, 12px, 0) rotate(-8deg) scale(0.95); }
+            100% { transform: translate3d(18px, -24px, 0) rotate(10deg) scale(1.08); }
+        }
+        @keyframes roseFloat {
+            0% { transform: translateY(15px) rotate(-5deg); opacity: 0.05; }
+            50% { opacity: 0.13; }
+            100% { transform: translateY(-28px) rotate(7deg); opacity: 0.07; }
         }
         .particle {
             position: absolute;
@@ -225,6 +264,8 @@
             display: none;
             opacity: 0;
             transition: opacity 2s ease;
+            position: relative;
+            background: linear-gradient(180deg, rgba(var(--burgundy-rgb), 0.1), rgba(var(--bg-rgb), 0.32));
         }
 
         /* === SECRET HOLD SECTION === */
@@ -434,6 +475,7 @@
     </audio>
 
     <div id="particles"></div>
+    <div id="background-doodles" aria-hidden="true"></div>
 
     <!-- LOCK SCREEN -->
     <div id="lock-screen">
@@ -567,6 +609,21 @@
             p.style.animationDuration = (Math.random() * 8 + 4) + 's';
             p.style.animationDelay = (Math.random() * 5) + 's';
             particleContainer.appendChild(p);
+        }
+
+        // Create faint animated roses and love doodles
+        const doodleContainer = document.getElementById('background-doodles');
+        const doodleShapes = ['&#10047;', '&#9825;', '&#10022;', '&#10048;', '&#127801;', 'love', '&#8767;'];
+        for (let i = 0; i < 18; i++) {
+            const doodle = document.createElement('span');
+            doodle.className = `doodle ${i % 4 === 0 ? 'rose-art' : ''}`;
+            doodle.innerHTML = doodleShapes[i % doodleShapes.length];
+            doodle.style.left = (3 + Math.random() * 92) + '%';
+            doodle.style.top = (2 + Math.random() * 94) + '%';
+            doodle.style.fontSize = (1.5 + Math.random() * 3.5) + 'rem';
+            doodle.style.setProperty('--drift-time', (12 + Math.random() * 12) + 's');
+            doodle.style.animationDelay = (-Math.random() * 15) + 's';
+            doodleContainer.appendChild(doodle);
         }
 
         // 2. Lock Screen Logic
