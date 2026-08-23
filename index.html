@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For You, Always.</title>
+    
+    <!-- Google Fonts for Luxury Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* === CSS VARIABLES & RESET === */
+        :root {
+            --bg-color: #0a0607;
+            --cream: #f9f6f0;
+            --burgundy: #5e1929;
+            --rose: #b87383;
+            --gold: #d4af37;
+            --bg-rgb: 10, 6, 7;
+            --cream-rgb: 249, 246, 240;
+            --burgundy-rgb: 94, 25, 41;
+            --rose-rgb: 184, 115, 131;
+            --gold-rgb: 212, 175, 55;
+            --glass-bg: rgba(var(--cream-rgb), 0.03);
+            --glass-border: rgba(var(--cream-rgb), 0.08);
+            color-scheme: dark;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        *::selection {
+            background: var(--burgundy);
+            color: var(--cream);
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold) var(--bg-color);
+        }
+        *::-webkit-scrollbar { width: 8px; }
+        *::-webkit-scrollbar-track { background: var(--bg-color); }
+        *::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--rose), var(--burgundy));
+            border-radius: 10px;
+        }
+
+        body, html {
+            background-color: var(--bg-color);
+            color: var(--cream);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        @media print {
+            body { display: none !important; }
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+        }
+
+        .script {
+            font-family: 'Dancing Script', cursive;
+            color: var(--gold);
+        }
+
+        /* === PARTICLES === */
+        #particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            bottom: -10px;
+            width: 3px; height: 3px;
+            background-color: var(--gold);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            to { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        /* === REVEAL ANIMATIONS === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === UTILITIES === */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(var(--bg-rgb), 0.75);
+            text-align: center;
+        }
+        
+        section {
+            min-height: 100vh;
+            padding: 4rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* === LOCK SCREEN === */
+        #lock-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            transition: opacity 1.5s ease, visibility 1.5s;
+        }
+        .lock-container {
+            text-align: center;
+        }
+        .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        .passcode-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--gold);
+            color: var(--cream);
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 10px;
+            width: 150px;
+            margin: 20px 0;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            letter-spacing: 5px;
+        }
+        .passcode-input::placeholder {
+            color: rgba(var(--cream-rgb), 0.2);
+            letter-spacing: 2px;
+            font-size: 1rem;
+        }
+        .shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+            color: var(--rose);
+            border-bottom-color: var(--burgundy);
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* === BUTTONS === */
+        .btn {
+            background: transparent;
+            color: var(--cream);
+            border: 1px solid var(--gold);
+            padding: 12px 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: var(--gold);
+            color: var(--bg-color);
+        }
+
+        /* === INTRO SCREEN === */
+        #intro {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.5s ease;
+        }
+
+        /* === MAIN CONTENT CONTAINER === */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        /* === SECRET HOLD SECTION === */
+        #secret-trigger {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 2px dashed var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .filling {
+            background: rgba(var(--gold-rgb), 0.2);
+            transform: scale(0.9);
+        }
+        #hidden-message {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: all 1s ease;
+            color: var(--gold);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-align: center;
+        }
+        #hidden-message.revealed {
+            opacity: 1;
+            height: auto;
+            margin-top: 2rem;
+        }
+
+        /* === MISS ME BUTTON === */
+        .miss-me-btn {
+            background: rgba(var(--rose-rgb), 0.2);
+            border: 1px solid var(--rose);
+            color: var(--cream);
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: transform 0.2s, background 0.3s;
+        }
+        .miss-me-btn:active {
+            transform: scale(0.95);
+        }
+        .floating-heart {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 9999;
+            animation: floatHeart 1.5s ease-out forwards;
+        }
+        @keyframes floatHeart {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-200px) scale(1.5) rotate(20deg); opacity: 0; }
+        }
+
+        /* === COUNTDOWN TIMER === */
+        .timer-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .time-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--gold);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 70px;
+            text-align: center;
+        }
+        .time-box span {
+            display: block;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+        }
+        .time-box small {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+        }
+
+        /* === HERO & TYPOGRAPHY === */
+        .hero-img-container {
+            width: 250px;
+            height: 350px;
+            border-radius: 150px 150px 0 0;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .hero-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.8) contrast(1.1);
+        }
+        .hero-title { font-size: 3.5rem; margin-bottom: 0.5rem; text-align: center; }
+        .hero-subtitle { font-size: 1rem; letter-spacing: 3px; opacity: 0.7; text-transform: uppercase; }
+
+        /* === ENDLESS PHOTO ZOOM === */
+        #memories {
+            overflow: hidden;
+            padding: 0;
+            background: var(--bg-color);
+        }
+        .memory-slideshow {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+        .memory-slideshow::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(180deg, rgba(var(--bg-rgb), 0.2), rgba(var(--burgundy-rgb), 0.38), rgba(var(--bg-rgb), 0.72));
+            pointer-events: none;
+        }
+        .memory-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            animation: endlessPhotos 50s linear infinite;
+        }
+        .memory-photo {
+            position: absolute;
+            top: 7%;
+            left: 7%;
+            width: 86%;
+            height: 72%;
+            object-fit: contain;
+            object-position: center;
+            transform: scale(var(--memory-scale, 1));
+            transform-origin: var(--memory-x, 50%) var(--memory-y, 50%);
+            transition: transform 0.35s ease, transform-origin 0.2s ease;
+            will-change: transform;
+            border-radius: 18px;
+            filter: drop-shadow(0 12px 30px rgba(var(--bg-rgb), 0.8));
+        }
+        .memory-slide:nth-child(1) { animation-delay: 0s; }
+        .memory-slide:nth-child(2) { animation-delay: 5s; }
+        .memory-slide:nth-child(3) { animation-delay: 10s; }
+        .memory-slide:nth-child(4) { animation-delay: 15s; }
+        .memory-slide:nth-child(5) { animation-delay: 20s; }
+        .memory-slide:nth-child(6) { animation-delay: 25s; }
+        .memory-slide:nth-child(7) { animation-delay: 30s; }
+        .memory-slide:nth-child(8) { animation-delay: 35s; }
+        .memory-slide:nth-child(9) { animation-delay: 40s; }
+        .memory-slide:nth-child(10) { animation-delay: 45s; }
+        @keyframes endlessPhotos {
+            0% { opacity: 0; }
+            3% { opacity: 1; }
+            9% { opacity: 1; }
+            12% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+        .photo-love-line {
+            position: absolute;
+            left: 50%;
+            bottom: 4%;
+            z-index: 4;
+            width: min(88%, 650px);
+            transform: translateX(-50%);
+            padding: 0.9rem 1.2rem;
+            border: 1px solid rgba(var(--gold-rgb), 0.35);
+            border-radius: 14px;
+            background: rgba(var(--bg-rgb), 0.72);
+            backdrop-filter: blur(8px);
+            color: var(--cream);
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.3rem, 4vw, 2rem);
+            line-height: 1.35;
+            text-align: center;
+            text-shadow: 0 2px 8px var(--bg-color);
+        }
+        .memory-caption {
+            position: relative;
+            z-index: 3;
+            padding: 1.5rem;
+            text-align: center;
+            text-shadow: 0 3px 18px rgba(var(--bg-rgb), 0.9);
+        }
+        .memory-caption h2 { font-size: clamp(2.4rem, 8vw, 4.5rem); }
+        .memory-caption p { margin-top: 0.75rem; letter-spacing: 3px; text-transform: uppercase; font-size: 0.8rem; }
+
+        /* Audio Element hidden */
+        audio { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Background Audio -->
+    <audio id="bg-music" loop>
+        <!-- REPLACE THIS WITH YOUR MUSIC LINK -->
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="particles"></div>
+
+    <!-- LOCK SCREEN -->
+    <div id="lock-screen">
+        <div class="lock-container">
+            <div class="lock-icon">🔒</div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">Restricted Access</h2>
+            <p style="opacity: 0.7; font-size: 0.9rem;">Enter the date we met (MMDD)</p>
+            <!-- CHANGE THE CORRECT PASSCODE IN THE JAVASCRIPT BELOW -->
+            <input type="password" id="passcode" class="passcode-input" placeholder="****" inputmode="numeric" maxlength="4">
+            <br>
+            <button class="btn" onclick="checkPassword()">Unlock</button>
+        </div>
+    </div>
+
+    <!-- OPENING SCREEN -->
+    <div id="intro">
+        <p style="font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 2rem; opacity: 0.8;">I made a little corner of the internet for you.</p>
+        <button class="btn" onclick="enterSite()">Enter my heart ♡</button>
+    </div>
+
+    <!-- MAIN SITE -->
+    <div id="main-content">
+        
+        <!-- PAGE 1: HER -->
+        <section id="her">
+            <div class="hero-img-container reveal">
+                <!-- REPLACE WITH HER PICTURE -->
+                <img src="photo-1.jpg" alt="Her">
+            </div>
+            <h1 class="hero-title reveal delay-1">Damilola</h1>
+            <p class="hero-subtitle reveal delay-2">My obsession &#127801;</p>
+        </section>
+
+        <!-- PAGE 2: ENDLESS MEMORIES -->
+        <section id="memories">
+            <div class="memory-slideshow">
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.31 PM.jpeg" alt="Damilola posing for a mirror selfie"><figcaption class="photo-love-line">You live in my thoughts like you were always meant to be there.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.32 PM.jpeg" alt="Close portrait of Damilola"><figcaption class="photo-love-line">Even one glimpse of you can become the best part of my day.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.33 PM.jpeg" alt="Damilola dressed in red"><figcaption class="photo-love-line">Every color feels more alive when it is wrapped around you.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.36 PM.jpeg" alt="Damilola smiling outdoors"><figcaption class="photo-love-line">I could search a lifetime and still choose your smile every time.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.38 PM (1).jpeg" alt="Damilola in a peach headscarf"><figcaption class="photo-love-line">My favorite addiction is the happiness your face brings me.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.38 PM.jpeg" alt="Damilola sitting outside"><figcaption class="photo-love-line">Life feels softer whenever my heart wanders back to you.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.39 PM (1).jpeg" alt="Damilola in a black and gold dress"><figcaption class="photo-love-line">You are not just part of my world; you are the view I never tire of.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.39 PM.jpeg" alt="Damilola smiling in a colorful outfit"><figcaption class="photo-love-line">Loving you has become the sweetest rhythm of my life.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.40 PM (1).jpeg" alt="Close portrait of Damilola in a floral scarf"><figcaption class="photo-love-line">I notice every detail because my heart refuses to look away.</figcaption></figure>
+                <figure class="memory-slide"><img class="memory-photo" src="WhatsApp Image 2026-08-23 at 8.35.40 PM.jpeg" alt="A pink flower for Damilola"><figcaption class="photo-love-line">If obsession could bloom, it would look like a garden made for you.</figcaption></figure>
+            </div>
+            <div class="memory-caption reveal">
+                <h2 class="script">Every version of you</h2>
+                <p>Still my favorite view</p>
+            </div>
+        </section>
+
+        <!-- PAGE 3: THE SECRET -->
+        <section id="secret-section">
+            <h2 class="reveal" style="font-size: 2rem; margin-bottom: 1rem;">A Hidden Thought</h2>
+            <p class="reveal script" style="font-size: 1.5rem; margin-bottom: 2rem;">Some things require patience...</p>
+            
+            <div id="secret-trigger" class="reveal delay-1">
+                <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;">Hold</span>
+            </div>
+            
+            <div id="hidden-message">
+                <p>I was thinking about you while making this.</p>
+                <p>Actually, I'm almost always thinking about you.</p>
+                <p>You are my absolute favorite distraction.</p>
+            </div>
+        </section>
+
+        <!-- PAGE 3: THE LETTER -->
+        <section id="letter">
+            <h2 class="reveal script" style="font-size: 3rem; margin-bottom: 2rem;">A Letter For You</h2>
+            
+            <div class="glass-card reveal delay-1" style="max-width: 600px; text-align: left; line-height: 2; font-size: 1.1rem; opacity: 0.9;">
+                <p>My dearest Damilola,</p>
+                <p>It began quietly. One thought about you became two, then somehow you started appearing in every peaceful moment of my day. Your smile stayed in my mind long after our conversations ended, and I found myself looking forward to the smallest chance to hear from you again.</p>
+                <p>Before long, liking you had grown into a beautiful obsession. It is the kind that makes ordinary days feel brighter and gives every love song a meaning. Even when life is busy, some part of my heart is always holding your name.</p>
+                <p>So I made this little place for everything I cannot fit into a message. It is my way of saying that you are unforgettable, deeply cherished, and the sweetest thought I never want to lose.</p>
+                <p class="script" style="font-size: 2rem; margin-top: 2rem; text-align: right;">Yours, Jasper ♡</p>
+            </div>
+        </section>
+
+        <!-- PAGE 4: MISS ME BUTTON -->
+        <section id="miss-me">
+            <h2 class="reveal" style="font-size: 2rem; margin-bottom: 3rem; text-align: center;">Emergency Button</h2>
+            <button class="miss-me-btn reveal delay-1" onclick="explodeHearts(event)">
+                Press if you miss me
+            </button>
+        </section>
+
+        <!-- FINAL SCREEN -->
+        <section id="finale" style="justify-content: center; text-align: center;">
+            <h2 class="reveal delay-1" style="font-size: 2rem; line-height: 1.6;">And after all of this...</h2>
+            <br>
+            <h2 class="script reveal delay-2" style="font-size: 3rem; color: var(--rose);">I'd still choose you.</h2>
+            <br>
+            <p class="reveal delay-3" style="letter-spacing: 2px; opacity: 0.6; text-transform: uppercase; font-size: 0.8rem;">Today. Tomorrow. Always.</p>
+            
+            <!-- OPTIONAL: VOICE NOTE BUTTON -->
+            <!-- Uncomment the lines below if you want to add a secret voice note -->
+            <!--
+            <br><br>
+            <audio id="voice-note" src="voicenote.mp3"></audio>
+            <button class="btn reveal delay-3" style="margin-top: 30px; font-size: 0.8rem;" onclick="document.getElementById('voice-note').play()">Play Secret Voice Note 🎤</button>
+            -->
+        </section>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Basic Copy Protection
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('dragstart', event => event.preventDefault());
+        document.addEventListener('selectstart', event => event.preventDefault());
+        document.addEventListener('copy', event => event.preventDefault());
+        document.addEventListener('cut', event => event.preventDefault());
+        document.addEventListener('keydown', event => {
+            const blockedShortcut = (event.ctrlKey || event.metaKey) && ['c', 's', 'u', 'p'].includes(event.key.toLowerCase());
+            if (blockedShortcut || event.key === 'F12') {
+                event.preventDefault();
+            }
+        });
+
+        // 1. Create Floating Particles
+        const particleContainer = document.getElementById('particles');
+        for (let i = 0; i < 40; i++) {
+            let p = document.createElement('div');
+            p.classList.add('particle');
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 8 + 4) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            particleContainer.appendChild(p);
+        }
+
+        // 2. Lock Screen Logic
+        const CORRECT_PASSCODE = "0608"; // The day she gave me her number
+
+        function checkPassword() {
+            const input = document.getElementById('passcode');
+            if(input.value === CORRECT_PASSCODE) {
+                // Success
+                document.getElementById('lock-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('lock-screen').style.visibility = 'hidden';
+                    document.getElementById('intro').style.visibility = 'visible';
+                    document.getElementById('intro').style.opacity = '1';
+                }, 1500);
+            } else {
+                // Fail shake effect
+                input.classList.add('shake');
+                input.value = '';
+                setTimeout(() => {
+                    input.classList.remove('shake');
+                }, 400);
+            }
+        }
+
+        // 3. Enter Site Logic
+        function enterSite() {
+            const intro = document.getElementById('intro');
+            const main = document.getElementById('main-content');
+            const music = document.getElementById('bg-music');
+            
+            intro.style.opacity = '0';
+            music.volume = 0.5;
+            music.play().catch(e => console.log("Audio play failed:", e));
+
+            setTimeout(() => {
+                intro.style.display = 'none';
+                main.style.display = 'block';
+                void main.offsetWidth; 
+                main.style.opacity = '1';
+                initObserver();
+            }, 1500);
+        }
+
+        // 4. Scroll Reveal Animation Logic
+        function initObserver() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.2 });
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // 5. Finger / Mouse Controlled Photo Zoom
+        const memoriesSection = document.getElementById('memories');
+        const memoryPhotos = document.querySelectorAll('.memory-photo');
+        let zoomResetTimer;
+
+        const moveMemoryZoom = (event) => {
+            const rect = memoriesSection.getBoundingClientRect();
+            const x = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
+            const y = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100));
+
+            memoryPhotos.forEach(photo => {
+                photo.style.setProperty('--memory-x', `${x}%`);
+                photo.style.setProperty('--memory-y', `${y}%`);
+                photo.style.setProperty('--memory-scale', '1.08');
+            });
+
+            clearTimeout(zoomResetTimer);
+            zoomResetTimer = setTimeout(resetMemoryZoom, 700);
+        };
+
+        const resetMemoryZoom = () => {
+            memoryPhotos.forEach(photo => photo.style.setProperty('--memory-scale', '1'));
+        };
+
+        memoriesSection.addEventListener('pointermove', moveMemoryZoom);
+        memoriesSection.addEventListener('pointerleave', resetMemoryZoom);
+        memoriesSection.addEventListener('pointerup', resetMemoryZoom);
+        memoriesSection.addEventListener('pointercancel', resetMemoryZoom);
+
+        // 6. Secret Hold Logic
+        const secretTrigger = document.getElementById('secret-trigger');
+        const hiddenMessage = document.getElementById('hidden-message');
+        let pressTimer;
+        let isRevealed = false;
+
+        const startPress = () => {
+            if(isRevealed) return;
+            secretTrigger.classList.add('filling');
+            pressTimer = window.setTimeout(() => {
+                hiddenMessage.classList.add('revealed');
+                secretTrigger.style.borderColor = "var(--rose)";
+                secretTrigger.innerHTML = "Unlocked ♡";
+                isRevealed = true;
+            }, 2500); // Hold for 2.5 seconds
+        };
+
+        const cancelPress = () => {
+            if(isRevealed) return;
+            secretTrigger.classList.remove('filling');
+            clearTimeout(pressTimer);
+        };
+
+        secretTrigger.addEventListener('mousedown', startPress);
+        secretTrigger.addEventListener('mouseup', cancelPress);
+        secretTrigger.addEventListener('mouseleave', cancelPress);
+        secretTrigger.addEventListener('touchstart', startPress);
+        secretTrigger.addEventListener('touchend', cancelPress);
+
+        // 7. Miss Me Button (Heart Explosion)
+        function explodeHearts(e) {
+            // Create hearts
+            for(let i = 0; i < 40; i++) {
+                let heart = document.createElement('div');
+                heart.innerHTML = ['❤️', '💖', '💗', '✨'][Math.floor(Math.random()*4)];
+                heart.className = 'floating-heart';
+                heart.style.left = (e.clientX || window.innerWidth/2) + (Math.random() * 200 - 100) + 'px';
+                heart.style.top = (e.clientY || window.innerHeight/2) + 'px';
+                heart.style.animationDuration = (Math.random() * 1 + 1) + 's';
+                
+                // Random horizontal drift
+                let drift = Math.random() * 100 - 50;
+                heart.style.transform = `translateX(${drift}px)`;
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 2000);
+            }
+
+        }
+    </script>
+</body>
+</html>
