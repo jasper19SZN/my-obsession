@@ -118,6 +118,18 @@
             filter: drop-shadow(0 0 18px rgba(var(--gold-rgb), 0.2));
             animation: roseFloat var(--drift-time, 18s) ease-in-out infinite alternate;
         }
+        .doodle.khaira-mark {
+            color: var(--cream);
+            opacity: 0.2;
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            text-shadow:
+                0 0 12px rgba(var(--rose-rgb), 0.6),
+                0 0 28px rgba(var(--gold-rgb), 0.22);
+            animation: khairaSignature var(--drift-time, 20s) ease-in-out infinite alternate;
+        }
         @keyframes doodleDrift {
             0% { transform: translate3d(-8px, 12px, 0) rotate(-8deg) scale(0.95); }
             100% { transform: translate3d(18px, -24px, 0) rotate(10deg) scale(1.08); }
@@ -126,6 +138,11 @@
             0% { transform: translateY(15px) rotate(-5deg) scale(0.95); opacity: 0.18; }
             50% { opacity: 0.38; }
             100% { transform: translateY(-28px) rotate(7deg) scale(1.1); opacity: 0.22; }
+        }
+        @keyframes khairaSignature {
+            0% { transform: translate3d(-12px, 10px, 0) rotate(-7deg) scale(0.96); opacity: 0.13; }
+            50% { opacity: 0.3; }
+            100% { transform: translate3d(18px, -18px, 0) rotate(5deg) scale(1.06); opacity: 0.2; }
         }
         .particle {
             position: absolute;
@@ -203,6 +220,20 @@
             opacity: 0.16;
             white-space: nowrap;
             animation: openingRoses 7s ease-in-out infinite alternate;
+        }
+        #lock-screen::after,
+        #intro::after {
+            content: "she's Khaira";
+            position: absolute;
+            bottom: 9%;
+            color: var(--cream);
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 9vw, 5rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            opacity: 0.2;
+            text-shadow: 0 0 18px rgba(var(--rose-rgb), 0.65), 0 0 34px rgba(var(--gold-rgb), 0.25);
+            animation: khairaSignature 8s ease-in-out infinite alternate;
         }
         @keyframes openingRoses {
             from { transform: translate(-3%, 8%) rotate(-4deg) scale(0.94); }
@@ -712,6 +743,19 @@
             doodle.style.setProperty('--drift-time', (12 + Math.random() * 12) + 's');
             doodle.style.animationDelay = (-Math.random() * 15) + 's';
             doodleContainer.appendChild(doodle);
+        }
+
+        // Handwritten Khaira signatures woven into the background
+        for (let i = 0; i < 7; i++) {
+            const signature = document.createElement('span');
+            signature.className = 'doodle khaira-mark';
+            signature.textContent = "she's Khaira";
+            signature.style.left = (2 + Math.random() * 76) + '%';
+            signature.style.top = (5 + i * 14 + Math.random() * 5) + '%';
+            signature.style.fontSize = (2.1 + Math.random() * 2.2) + 'rem';
+            signature.style.setProperty('--drift-time', (16 + Math.random() * 10) + 's');
+            signature.style.animationDelay = (-Math.random() * 16) + 's';
+            doodleContainer.appendChild(signature);
         }
 
         // Add randomized glassy love notes around every memory
