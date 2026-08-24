@@ -59,6 +59,7 @@
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
             scroll-behavior: smooth;
+            min-height: 100%;
         }
 
         body {
@@ -182,6 +183,7 @@
         
         section {
             min-height: 100vh;
+            min-height: 100svh;
             padding: 4rem 1.5rem;
             display: flex;
             flex-direction: column;
@@ -204,6 +206,9 @@
             align-items: center;
             z-index: 200;
             transition: opacity 1.5s ease, visibility 1.5s;
+            min-height: 100dvh;
+            padding: max(1.25rem, env(safe-area-inset-top)) 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+            overflow-y: auto;
         }
         .lock-container {
             text-align: center;
@@ -310,6 +315,9 @@
             opacity: 0;
             visibility: hidden;
             transition: opacity 1.5s ease;
+            min-height: 100dvh;
+            padding: max(1.25rem, env(safe-area-inset-top)) 1.25rem max(1.25rem, env(safe-area-inset-bottom));
+            text-align: center;
         }
         #intro > * {
             position: relative;
@@ -580,6 +588,77 @@
         }
         .memory-caption h2 { font-size: clamp(2.4rem, 8vw, 4.5rem); }
         .memory-caption p { margin-top: 0.75rem; letter-spacing: 3px; text-transform: uppercase; font-size: 0.8rem; }
+
+        /* === MOBILE LAYOUT === */
+        @media (max-width: 600px) {
+            section {
+                min-height: 100svh;
+                padding: max(3rem, env(safe-area-inset-top)) 1rem max(3rem, env(safe-area-inset-bottom));
+            }
+            .glass-card {
+                width: 100%;
+                padding: 1.35rem;
+                font-size: 1rem !important;
+                line-height: 1.75 !important;
+            }
+            .hero-img-container {
+                width: min(68vw, 250px);
+                height: min(95vw, 350px);
+            }
+            .hero-title { font-size: clamp(2.5rem, 13vw, 3.5rem); }
+            .hero-subtitle {
+                max-width: 92vw;
+                font-size: 0.78rem;
+                letter-spacing: 2px;
+                text-align: center;
+            }
+            #memories { min-height: 100svh; }
+            .memory-slide::before {
+                inset: 4% 3% 23%;
+                border-radius: 20px;
+            }
+            .memory-photo {
+                top: 6%;
+                left: 5%;
+                width: 90%;
+                height: 64%;
+                border-radius: 14px;
+            }
+            .photo-love-line {
+                bottom: max(3%, env(safe-area-inset-bottom));
+                width: 92%;
+                padding: 0.72rem 0.9rem;
+                font-size: clamp(1.05rem, 5vw, 1.45rem);
+            }
+            .photo-whisper {
+                max-width: 46vw;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 0.35rem 0.62rem;
+                font-size: 0.82rem;
+            }
+            .photo-whisper:nth-of-type(3) { display: none; }
+            .memory-caption {
+                align-self: flex-start;
+                width: 100%;
+                padding-top: max(1rem, env(safe-area-inset-top));
+            }
+            .memory-caption h2 { font-size: clamp(2rem, 10vw, 3rem); }
+            .memory-caption p { font-size: 0.65rem; letter-spacing: 2px; }
+            .btn, .miss-me-btn {
+                min-height: 48px;
+                max-width: 92vw;
+            }
+            #secret-trigger { width: 105px; height: 105px; }
+            .doodle.khaira-mark { opacity: 0.15; }
+        }
+
+        @media (max-height: 620px) and (orientation: landscape) {
+            section { min-height: 130vh; }
+            #lock-screen, #intro { justify-content: flex-start; padding-top: 2rem; }
+            .memory-photo { top: 4%; height: 68%; }
+            .photo-love-line { bottom: 2%; }
+        }
 
         /* Audio Element hidden */
         audio { display: none; }
