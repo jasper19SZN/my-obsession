@@ -591,6 +591,11 @@
 
         /* === MOBILE LAYOUT === */
         @media (max-width: 600px) {
+            /* Mobile fail-safe: content must never depend on IntersectionObserver. */
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
             section {
                 min-height: 100svh;
                 padding: max(3rem, env(safe-area-inset-top)) 1rem max(3rem, env(safe-area-inset-bottom));
@@ -650,6 +655,15 @@
                 max-width: 92vw;
             }
             #secret-trigger { width: 105px; height: 105px; }
+            #secret-section, #letter, #miss-me, #finale {
+                display: flex;
+                visibility: visible;
+            }
+            #hidden-message.revealed {
+                height: auto;
+                max-height: none;
+                overflow: visible;
+            }
             .doodle.khaira-mark { opacity: 0.15; }
         }
 
@@ -908,13 +922,18 @@
         // 4. Scroll Reveal Animation Logic
         function initObserver() {
             const reveals = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window)) {
+                reveals.forEach(el => el.classList.add('active'));
+                return;
+            }
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.2 });
+            }, { threshold: 0.05, rootMargin: '0px 0px 12% 0px' });
             reveals.forEach(el => observer.observe(el));
         }
 
@@ -953,15 +972,20 @@
         let pressTimer;
         let isRevealed = false;
 
+        const revealSecret = () => {
+            if(isRevealed) return;
+            clearTimeout(pressTimer);
+            hiddenMessage.classList.add('revealed');
+            secretTrigger.classList.remove('filling');
+            secretTrigger.style.borderColor = "var(--rose)";
+            secretTrigger.innerHTML = "Unlocked ♡";
+            isRevealed = true;
+        };
+
         const startPress = () => {
             if(isRevealed) return;
             secretTrigger.classList.add('filling');
-            pressTimer = window.setTimeout(() => {
-                hiddenMessage.classList.add('revealed');
-                secretTrigger.style.borderColor = "var(--rose)";
-                secretTrigger.innerHTML = "Unlocked ♡";
-                isRevealed = true;
-            }, 2500); // Hold for 2.5 seconds
+            pressTimer = window.setTimeout(revealSecret, 2500); // Hold for 2.5 seconds
         };
 
         const cancelPress = () => {
@@ -975,6 +999,9 @@
         secretTrigger.addEventListener('mouseleave', cancelPress);
         secretTrigger.addEventListener('touchstart', startPress);
         secretTrigger.addEventListener('touchend', cancelPress);
+        secretTrigger.addEventListener('click', () => {
+            if (window.matchMedia('(max-width: 600px)').matches) revealSecret();
+        });
 
         // 7. Miss Me Button (Heart Explosion)
         function explodeHearts(e) {
